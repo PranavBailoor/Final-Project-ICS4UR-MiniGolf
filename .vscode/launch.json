@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+    
+        {
+            "name": "Launch MiniGolf",
+            "type": "java",
+            "name": "Launch MiniGolfGame",
+            "request": "launch",
+            "mainClass": "MiniGolfGame",
+            "projectName": "Final Project ICS4UR",
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}
