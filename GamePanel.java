@@ -393,14 +393,6 @@ protected void paintComponent(Graphics g) {
                 repaint(); 
                 return;  
             }
-            // if (hole.contains(ball)) { 
-            //     timer.stop(); 
-            //     if (level < MAX_LEVEL) { 
-            //         loadLevel(level + 1); timer.start(); 
-            //     } else { 
-            //         app.showLeaderboard(strokes, par, level); 
-            //     } 
-            // }
         }
         repaint();
     }
