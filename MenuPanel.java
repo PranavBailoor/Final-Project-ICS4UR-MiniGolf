@@ -1,7 +1,7 @@
 import java.awt.*;
 import javax.swing.*;
 
-class MenuPanel extends JPanel {
+class MenuPanel extends JPanel {//starting menu panel class
     public MenuPanel(MiniGolfGame app) {
         setLayout(new BorderLayout());
         JLabel title = new JLabel("MINI GOLF", SwingConstants.CENTER);

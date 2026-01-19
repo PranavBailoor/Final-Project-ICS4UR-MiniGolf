@@ -50,9 +50,6 @@ public class MiniGolfGame extends JFrame {
 
 
     void startLevel(int level) {
-        if (level == 1) { 
-            Arrays.fill(game.levelCompleted, false);
-            Arrays.fill(game.allScores, 0); }
         game.loadLevel(level);
         layout.show(root, "GAME");
     }

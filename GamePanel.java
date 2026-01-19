@@ -42,7 +42,7 @@ class GamePanel extends JPanel implements MouseListener, MouseMotionListener, Ac
         this.app = app;
         Arrays.fill(levelCompleted, false);
         setLayout(null);
-        pauseBtn.setBounds(10,10,80,30);
+        pauseBtn.setBounds(10,10,80,30);//set pase, resume, lesvel select button positions and initialize
         pauseBtn.addActionListener(e -> { paused = !paused; 
             resumeBtn.setVisible(paused); 
             levelSelectBtn.setVisible(paused);
@@ -89,7 +89,7 @@ class GamePanel extends JPanel implements MouseListener, MouseMotionListener, Ac
         obstacles.clear();
         spinners.clear();
 
-        // Defer entity placement until we have a valid component size (done in paintComponent)
+        // Defer entity placement until we have a valid component size
         // clear existing entities and mark as not placed
         obstacles.clear();
         spinners.clear();
@@ -102,7 +102,7 @@ class GamePanel extends JPanel implements MouseListener, MouseMotionListener, Ac
         
     }
 
-    // build a normalized, centered course shape based on panel size
+    // build course shape 
     private double[][] getCoursePoints(int level) {
     return switch (level) {
         case 1 -> new double[][] {
@@ -158,7 +158,7 @@ class GamePanel extends JPanel implements MouseListener, MouseMotionListener, Ac
     };
 }
 
-private boolean buildCourseShape() {
+private boolean buildCourseShape() {//use points to fill in course shape
     int w = getWidth();
     int h = getHeight();
     if (w <= 0 || h <= 0) return false;
@@ -180,7 +180,7 @@ private boolean buildCourseShape() {
     return true;
 }
 
-// CRITICAL FIX: Only place entities ONCE per level
+
 private void placeLevelEntitiesIfNeeded() {
     if (entitiesPlaced) return; // Skip if already placed
     if (courseShape == null) return;
@@ -198,7 +198,7 @@ private void placeLevelEntities(int lvl) {
     obstacles.clear();
     spinners.clear();
 
-    switch (lvl) {
+    switch (lvl) {//place level entities based on level
         case 1 -> {
             ball = new Ball((int)(minX + boxW*0.15), (int)(minY + boxH*0.35));
             hole = new Hole((int)(minX + boxW*0.83), (int)(minY + boxH*0.18));
@@ -266,7 +266,7 @@ private void placeLevelEntities(int lvl) {
     par = manualPar[lvl - 1];
 }
 
-// Update paintComponent - call placeLevelEntitiesIfNeeded() instead of placeLevelEntities()
+// Update paintComponent to draw stuff
 @Override
 protected void paintComponent(Graphics g) {
     super.paintComponent(g);
@@ -280,7 +280,7 @@ protected void paintComponent(Graphics g) {
                         RenderingHints.VALUE_ANTIALIAS_ON);
 
     buildCourseShape();
-    placeLevelEntitiesIfNeeded(); // Changed from placeLevelEntities(level)
+    placeLevelEntitiesIfNeeded(); //place obstacles, ball and hole
 
     // Background
     g2.setColor(new Color(210,205,190));
@@ -358,13 +358,14 @@ protected void paintComponent(Graphics g) {
     }
 }
     @Override
-    public void actionPerformed(ActionEvent e) {
+     public void actionPerformed(ActionEvent e) {
         if (!paused) {
             ball.update(this);
             // advance spinners
             for (Spinner s : spinners) s.update();
-            if (hole.contains(ball) && !playingConfetti) { 
-                int idx = level - 1; levelCompleted[idx] = true;
+            if (hole.contains(ball) && !playingConfetti) { //check for ball into hole and update confetti
+                int idx = level - 1; 
+                levelCompleted[idx] = true;
                 bestScores[idx] = Math.min(bestScores[idx], strokes);
                 allScores[level - 1] = strokes;
                 ball.sunk = true;
@@ -380,14 +381,34 @@ protected void paintComponent(Graphics g) {
                 confettiTimer--; 
                 if (confettiTimer <= 0) {
                     playingConfetti = false;
-                    if (level < MAX_LEVEL) {
-                // DO NOT reset strokes before updating bestScores
-                loadLevel(level + 1);
-                } else {
-                    // Show leaderboard BEFORE resetting strokes
-                    app.leaderboard.updateScores(allScores);
-                    app.showLeaderboard();
-                  }
+                    
+                    // Check if ALL levels are now completed
+                    boolean allLevelsCompleted = true;
+                    for (int i = 0; i < 8; i++) {
+                        if (!levelCompleted[i]) {
+                            allLevelsCompleted = false;
+                            break;
+                        }
+                    }
+                    
+                    if (allLevelsCompleted) {
+                        // All 8 levels completed, show leaderboard
+                        app.leaderboard.updateScores(allScores);
+                        app.showLeaderboard();
+                    } else if (level < MAX_LEVEL) {
+                        // Not all levels completed yet
+                        // Check if next level was already completed
+                        if (levelCompleted[level]) {
+                            // Next level already completed, go back to level select
+                            app.showLevelSelect();
+                        } else {
+                            // Automatically move to next level
+                            loadLevel(level + 1);
+                        }
+                    } else {
+                        // Level 8 completed but not all levels done, go back to level select
+                        app.showLevelSelect();
+                    }
                 }
  
                 repaint(); 

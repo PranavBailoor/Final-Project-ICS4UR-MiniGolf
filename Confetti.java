@@ -1,7 +1,7 @@
 
 import java.awt.*;
 
-public class Confetti {
+public class Confetti {//confetti class
     double x, y;
     double vx, vy;
     Color color;

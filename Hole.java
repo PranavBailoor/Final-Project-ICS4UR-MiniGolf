@@ -1,6 +1,6 @@
 import java.awt.*;
 
-class Hole {
+class Hole {//hole class
     int x,y;
     int r = 12;
 

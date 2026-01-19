@@ -4,4 +4,4 @@ This project is a 2d mini golf game based on the iphone GamePigeon golf game. We
 Contributors:
 - Pranav Bailoor
 - Yusuf Farooq
-- Nebil Ibrahim
+- Nebil Ibrahim*

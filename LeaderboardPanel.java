@@ -7,7 +7,7 @@ final class LeaderboardPanel extends JPanel {
 
     MiniGolfGame app;
 
-    int[] bestScores = new int[8];
+    int[] bestScores = new int[8];//array for high score and latest score
     int[] latestScores = new int[8];
 
     File file = new File(System.getProperty("user.home"), "minigolf_scores.txt");
@@ -75,7 +75,7 @@ final class LeaderboardPanel extends JPanel {
         }
     }
 
-    // Build the UI
+    // Build the new leaderboard every time its called
     void rebuildDisplay() {
         removeAll(); 
         setLayout(new BorderLayout()); 
@@ -107,7 +107,7 @@ final class LeaderboardPanel extends JPanel {
         add(bottom, BorderLayout.SOUTH); revalidate(); repaint();
     }
 
-    JPanel makeCard(String title, int[] scores) {
+    JPanel makeCard(String title, int[] scores) {//border creation for leaderboard panel
     JPanel card = new JPanel();
     card.setLayout(new BorderLayout());
     card.setBackground(Color.WHITE);
@@ -163,12 +163,12 @@ final class LeaderboardPanel extends JPanel {
     return card;
 }
 
-        JLabel makeHeader(String text) { 
+        JLabel makeHeader(String text) { //headers
             JLabel l = new JLabel(text, SwingConstants.CENTER); 
             l.setFont(new Font("SansSerif", Font.BOLD, 18)); 
             return l; 
         } 
-        JLabel makeCell(String text) { 
+        JLabel makeCell(String text) { //text
             JLabel l = new JLabel(text, SwingConstants.CENTER); 
             l.setFont(new Font("SansSerif", Font.PLAIN, 16)); 
             return l; 

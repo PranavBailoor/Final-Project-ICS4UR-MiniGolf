@@ -13,7 +13,7 @@ class Ball {
 
     boolean update(GamePanel g) {
         boolean collidedThisFrame = false;
-        //boolean wasStill = !isMoving();
+        
 
         // update integer position for drawing/collision
         x = (int)Math.round(px);
@@ -44,7 +44,7 @@ class Ball {
                 x = (int)Math.round(px); 
                 y = (int)Math.round(py); 
         // bounce off the course boundary (if there is one)
-        // Check if ball center is outside the course shape
+        // Check if ball touches course boundary, calculate next position, push if within boundary otherwise invert velocity to bounce
         if (g.courseShape != null) { boolean inside = g.courseShape.contains(px, py); // Find nearest boundary point 
         PathIterator it = g.courseShape.getPathIterator(null); 
         double[] coords = new double[6]; 
@@ -55,13 +55,13 @@ class Ball {
         while (!it.isDone()) { 
             int seg = it.currentSegment(coords); 
             switch (seg) { 
-                case PathIterator.SEG_MOVETO -> { 
+                case PathIterator.SEG_MOVETO -> { // move to new start point
                     startX = coords[0]; 
                     startY = coords[1]; 
                     lastX = startX; 
                     lastY = startY; 
                 } 
-                case PathIterator.SEG_LINETO -> { 
+                case PathIterator.SEG_LINETO -> { // find closest point on line segment
                     double x1 = lastX, y1 = lastY; 
                     double x2 = coords[0], y2 = coords[1]; 
                     double dx = x2 - x1, dy = y2 - y1; 
@@ -77,7 +77,7 @@ class Ball {
                     if (d2 < bestDist2) { bestDist2 = d2; bestX = cx; bestY = cy; } 
                     lastX = x2; lastY = y2; 
                 } 
-                case PathIterator.SEG_CLOSE -> { 
+                case PathIterator.SEG_CLOSE -> { // check closing segment
                     double x1 = lastX, y1 = lastY; 
                     double x2 = startX, y2 = startY; 
                     double dx = x2 - x1, dy = y2 - y1; 
@@ -95,7 +95,7 @@ class Ball {
             } it.next(); 
         } 
         double dist = Math.sqrt(bestDist2); 
-        if (dist < r) { 
+        if (dist < r) { //invert velocity if ball is going outside boundary, check case for multiple boundaries
             double nx = px - bestX; 
             double ny = py - bestY; 
             double nlen = Math.hypot(nx, ny); 
@@ -119,7 +119,7 @@ class Ball {
         }
 
     }
-    for (Obstacle o : g.obstacles) { 
+    for (Obstacle o : g.obstacles) { //exact same thing but for obstacles
         PathIterator it = o.shape.getPathIterator(null); 
         double[] coords = new double[6]; 
         double startX = 0, startY = 0; 
@@ -202,7 +202,7 @@ class Ball {
             y = (int)Math.round(py); 
         } 
     }
-    for (Spinner s : g.spinners) { 
+    for (Spinner s : g.spinners) { //exact same thing but for spinners
         Shape spinShape = s.getCollisionShape(); 
         PathIterator it = spinShape.getPathIterator(null); 
         double[] coords = new double[6]; 
@@ -286,7 +286,7 @@ class Ball {
     }
         } 
     }
-    if (collidedThisFrame) { vx *= 0.55; vy *= 0.55; }
+    if (collidedThisFrame) { vx *= 0.55; vy *= 0.55; }//check collision
         return false;
 }
 

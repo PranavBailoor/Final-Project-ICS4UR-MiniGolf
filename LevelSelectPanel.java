@@ -1,7 +1,7 @@
 import java.awt.*;
 import javax.swing.*;
 
-class LevelSelectPanel extends JPanel {
+class LevelSelectPanel extends JPanel {//level select panel class
     MiniGolfGame app;
     @SuppressWarnings("OverridableMethodCallInConstructor")
     public LevelSelectPanel(MiniGolfGame app) {
@@ -48,7 +48,7 @@ class LevelSelectPanel extends JPanel {
     void updateButtonLabel(JButton b, int lvl, boolean[] completed) {
         String text = "Level " + lvl;
         if (completed[lvl - 1]) {
-            text += "  ✓";  // or use a dot: " ●"
+            text += "  ✓";  // check mark for completed levels
             b.setForeground(new Color(0, 150, 0)); // green text
         } else {
             b.setForeground(Color.BLACK);
@@ -56,7 +56,7 @@ class LevelSelectPanel extends JPanel {
         b.setText(text);
     }
 
-    void refresh() {
+    void refresh() {//refresh level select panel to show completed levels
         boolean[] completed = app.getCompletedLevels();
         Component[] comps = ((JPanel)((JPanel)getComponent(1)).getComponent(0)).getComponents();
         for (int i = 0; i < 8; i++) {
@@ -66,6 +66,4 @@ class LevelSelectPanel extends JPanel {
         revalidate();
         repaint();
     }
-
-
 }
